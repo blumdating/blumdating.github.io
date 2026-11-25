@@ -1,0 +1,892 @@
+/* Blum's website. Colours come from the app's theme (src/theme), and every pairing is checked
+   against WCAG AA in light and dark: body text at least 7:1, links and buttons at least 4.5:1, even
+   over the soft glows. The typeface is the app's own, Inter, served from this site (fonts/, SIL Open
+   Font License, see fonts/OFL.txt): nothing loads from anywhere else. Decoration never carries
+   meaning, and motion only plays for people who haven't asked their device to reduce it. */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/inter-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('fonts/inter-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('fonts/inter-800.woff2') format('woff2');
+}
+
+:root {
+  --bg: #ffffff;
+  --canvas: #fff8f4;
+  --card: #ffffff;
+  --border: #f0e2da;
+  --text: #1c1917;
+  --text-secondary: #57534e;
+  --link: #b8401c;
+  /* A coral wash for labels, the current page and highlighted boxes. */
+  --tint: #fdebe3;
+  --on-tint: #b8401c;
+  /* Buttons: a deeper take on the logo's gradient, so white text on it meets 4.5:1. */
+  --button-from: #c8431a;
+  --button-to: #a8361a;
+  --on-button: #ffffff;
+  --button-shadow: rgba(184, 64, 28, 0.3);
+  --focus: #e65a33;
+  /* The logo's peach, gold and pink as soft light. Kept faint enough for links over them. */
+  --glow-peach: rgba(252, 159, 134, 0.22);
+  --glow-gold: rgba(252, 188, 94, 0.22);
+  --glow-pink: rgba(252, 111, 129, 0.14);
+  --art-core: rgba(252, 159, 134, 0.38);
+  --header: rgba(255, 255, 255, 0.88);
+  --shadow: 0 1px 2px rgba(28, 25, 23, 0.04), 0 12px 32px -14px rgba(28, 25, 23, 0.14);
+  --radius: 1.25rem;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #120f0d;
+    --canvas: #17120f;
+    --card: #1f1a17;
+    --border: #3a322d;
+    --text: #faf7f5;
+    --text-secondary: #d6cec8;
+    --link: #f28a63;
+    --tint: #3a2219;
+    --on-tint: #f59a75;
+    --button-from: #f59a75;
+    --button-to: #ef6a40;
+    --on-button: #120f0d;
+    --button-shadow: rgba(0, 0, 0, 0.45);
+    --focus: #ef6a40;
+    --glow-peach: rgba(230, 90, 51, 0.22);
+    --glow-gold: rgba(252, 156, 5, 0.1);
+    --glow-pink: rgba(243, 9, 61, 0.12);
+    --art-core: rgba(230, 90, 51, 0.28);
+    --header: rgba(18, 15, 13, 0.88);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 32px -14px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2 {
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  margin: 0 0 0.75rem;
+}
+
+h2 {
+  font-size: 1.375rem;
+  margin: 2.25rem 0 0.75rem;
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 1rem;
+}
+
+ul,
+ol {
+  padding-left: 1.25rem;
+}
+
+li + li {
+  margin-top: 0.4rem;
+}
+
+strong {
+  font-weight: 600;
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+address {
+  font-style: normal;
+  line-height: 1.75;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -5rem;
+  z-index: 20;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: var(--button-to);
+  color: var(--on-button);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip:focus {
+  top: 1rem;
+}
+
+/* Layout */
+
+.wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.narrow {
+  max-width: 48rem;
+}
+
+.stack {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 2.5rem 4.5rem;
+}
+
+.grid-2 {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+
+/* Header: stays on screen on wide screens; on phones it scrolls away, so it never covers the text. */
+
+.site-header {
+  background: var(--header);
+  border-bottom: 1px solid var(--border);
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  padding-block: 0.5rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  margin: 0;
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.menu,
+.languages,
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu li + li,
+.languages li + li,
+.footer-links li + li {
+  margin-top: 0;
+}
+
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  background: var(--tint);
+}
+
+.menu a[aria-current='page'] {
+  background: var(--tint);
+  color: var(--on-tint);
+}
+
+@media (max-width: 40rem) {
+  .menu {
+    margin-left: -0.9rem;
+  }
+}
+
+@media (min-width: 60rem) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    backdrop-filter: saturate(1.4) blur(14px);
+  }
+
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+}
+
+/* Labels */
+
+.eyebrow,
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1.25rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--on-tint);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--focus);
+  box-shadow: 0 0 0 4px var(--glow-peach);
+}
+
+/* The band at the top of each page */
+
+.page-head {
+  padding-block: clamp(2.5rem, 1.5rem + 4vw, 4.5rem) clamp(2rem, 1.25rem + 3vw, 3.5rem);
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(40rem 18rem at 92% 0%, var(--glow-peach), transparent 70%),
+    radial-gradient(30rem 16rem at 0% 100%, var(--glow-gold), transparent 70%), var(--canvas);
+}
+
+.page-head h1 {
+  max-width: 44rem;
+}
+
+.lead {
+  max-width: 42rem;
+  margin-bottom: 0;
+  color: var(--text-secondary);
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.3rem);
+}
+
+.note {
+  max-width: 42rem;
+  margin: 1.25rem 0 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--card);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Cards */
+
+.card {
+  padding: clamp(1.25rem, 0.9rem + 1.2vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.card > :first-child {
+  margin-top: 0;
+}
+
+.card > :last-child {
+  margin-bottom: 0;
+}
+
+.card h2 {
+  font-size: 1.25rem;
+}
+
+.card-accent {
+  border-color: transparent;
+  background: var(--tint);
+  box-shadow: none;
+}
+
+.card-alert {
+  border-left: 4px solid var(--focus);
+}
+
+.aside {
+  margin: 0.25rem 0 0;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Buttons */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--button-from), var(--button-to));
+  box-shadow: 0 10px 24px -10px var(--button-shadow);
+  color: var(--on-button);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:hover {
+  filter: brightness(1.06);
+}
+
+/* Numbered steps and ticked lists */
+
+.steps {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  position: relative;
+  min-height: 2.25rem;
+  margin: 0;
+  padding-left: 3.15rem;
+  counter-increment: step;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -0.2rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--button-from), var(--button-to));
+  color: var(--on-button);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.checks {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0;
+  list-style: none;
+}
+
+.checks li {
+  position: relative;
+  margin: 0;
+  padding-left: 2.4rem;
+}
+
+.checks li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.12rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--tint);
+}
+
+.checks li::after {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  top: 0.42rem;
+  width: 0.4rem;
+  height: 0.75rem;
+  border: solid var(--on-tint);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Home page */
+
+.hero {
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(50rem 30rem at 88% 20%, var(--glow-peach), transparent 70%),
+    radial-gradient(40rem 24rem at 0% 100%, var(--glow-gold), transparent 70%),
+    radial-gradient(30rem 20rem at 55% 0%, var(--glow-pink), transparent 70%), var(--canvas);
+}
+
+.hero-grid {
+  display: grid;
+  gap: 1.5rem 3rem;
+  align-items: center;
+  padding-block: clamp(2.5rem, 1.5rem + 5vw, 6rem);
+}
+
+.hero h1 {
+  max-width: 40rem;
+  margin-bottom: 1.25rem;
+  font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+}
+
+.tagline {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.4rem);
+}
+
+.hero-art {
+  display: grid;
+  place-items: center;
+  order: -1;
+  width: 8rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--art-core) 0%, transparent 70%);
+}
+
+.hero-art img {
+  width: 70%;
+  height: auto;
+  filter: drop-shadow(0 16px 28px rgba(230, 90, 51, 0.28));
+}
+
+@media (min-width: 52rem) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  }
+
+  .hero-art {
+    order: 0;
+    justify-self: center;
+    width: min(100%, 24rem);
+  }
+
+  .hero-art img {
+    width: 62%;
+  }
+}
+
+.section {
+  padding-top: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+}
+
+.section:last-child {
+  padding-bottom: clamp(3rem, 2rem + 4vw, 5.5rem);
+}
+
+.points {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points li + li {
+  margin-top: 0;
+}
+
+.point h2 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.point p {
+  color: var(--text-secondary);
+}
+
+.icon {
+  width: 3rem;
+  height: 3rem;
+  padding: 0.7rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--button-from), var(--button-to));
+  box-shadow: 0 10px 20px -8px var(--button-shadow);
+  color: var(--on-button);
+}
+
+.cta {
+  text-align: center;
+  background:
+    radial-gradient(30rem 12rem at 50% 0%, var(--glow-peach), transparent 75%), var(--card);
+}
+
+.cta h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+}
+
+.cta p {
+  max-width: 34rem;
+  margin-inline: auto;
+  color: var(--text-secondary);
+}
+
+/* Legal pages: the summary and contents first; on wide screens the contents sit beside the text
+   and stay in view. */
+
+.legal {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: 2.5rem 4.5rem;
+}
+
+.summary {
+  padding: clamp(1.25rem, 0.9rem + 1.2vw, 2rem);
+  border-radius: var(--radius);
+  background: var(--tint);
+}
+
+.summary h2 {
+  margin-top: 0;
+  font-size: 1.125rem;
+}
+
+.summary ul {
+  margin: 0;
+}
+
+.contents {
+  padding: 1.25rem 1.25rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.contents h2 {
+  margin: 0 0 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contents ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.contents li + li {
+  margin-top: 0;
+}
+
+.contents a {
+  display: block;
+  padding: 0.4rem 0;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.contents a:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+.doc {
+  counter-reset: section;
+}
+
+.doc > section {
+  counter-increment: section;
+}
+
+.doc h2 {
+  margin-top: 2.5rem;
+  font-size: 1.3rem;
+}
+
+.doc > section:first-child h2 {
+  margin-top: 0.5rem;
+}
+
+.doc h2::before {
+  content: counter(section) '.';
+  margin-right: 0.5rem;
+  color: var(--on-tint);
+}
+
+@media (min-width: 64rem) {
+  .legal {
+    grid-template-columns: 16rem minmax(0, 46rem);
+    grid-template-areas:
+      'contents summary'
+      'contents doc';
+    justify-content: start;
+    column-gap: 3.5rem;
+    align-items: start;
+  }
+
+  .summary {
+    grid-area: summary;
+  }
+
+  .doc {
+    grid-area: doc;
+  }
+
+  .contents {
+    grid-area: contents;
+    position: sticky;
+    top: 6rem;
+    max-height: calc(100vh - 8rem);
+    overflow: auto;
+  }
+}
+
+/* Footer */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--canvas);
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.footer-top {
+  display: grid;
+  gap: 1.5rem 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  align-items: start;
+  padding-block: 3rem 2rem;
+}
+
+.footer-brand p {
+  margin: 0;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  column-gap: 1.5rem;
+}
+
+.footer-links a,
+.languages a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.languages {
+  gap: 0 1.1rem;
+}
+
+.footer-links a:hover,
+.languages a:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+.footer-links a[aria-current='page'],
+.languages a[aria-current='true'] {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.footer-bottom {
+  padding-block: 1.25rem 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+/* The language chooser and the page-not-found page */
+
+.choose {
+  display: grid;
+  place-items: center;
+  padding: 3rem 1.25rem;
+  background:
+    radial-gradient(40rem 24rem at 85% 10%, var(--glow-peach), transparent 70%),
+    radial-gradient(36rem 22rem at 10% 95%, var(--glow-gold), transparent 70%), var(--canvas);
+  text-align: center;
+}
+
+.choose-card {
+  max-width: 38rem;
+}
+
+.choose img {
+  width: 7.5rem;
+  height: auto;
+  margin: 0 auto 1.25rem;
+  filter: drop-shadow(0 14px 24px rgba(230, 90, 51, 0.25));
+}
+
+.choose p {
+  color: var(--text-secondary);
+}
+
+.choose .languages {
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.75rem;
+}
+
+.choose .languages a {
+  padding: 0 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.choose .languages a:hover {
+  background: var(--tint);
+  color: var(--on-tint);
+  text-decoration: none;
+}
+
+/* Gentle movement, only for people who haven't asked for less */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .button,
+  .point,
+  .menu a {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.15s ease;
+  }
+
+  .button:hover,
+  .point:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-art img {
+    animation: float 7s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+/* Windows' high-contrast mode drops backgrounds: keep buttons and badges outlined */
+
+@media (forced-colors: active) {
+  .button,
+  .icon,
+  .eyebrow,
+  .pill,
+  .steps li::before {
+    border: 1px solid CanvasText;
+  }
+}
